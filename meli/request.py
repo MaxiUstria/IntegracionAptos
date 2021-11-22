@@ -2,38 +2,25 @@ import requests
 import sys
 import json
 
-barrio = sys.argv
-
+brand = sys.argv[1]
 r = requests.get(
-    "https://api.mercadolibre.com/sites/MLU/search?category=MLU6393&q={}".format(barrio))
-apartamentos = []
-for apto in json.loads(r.text)['results']:
-    apartamento = {
-        "id": apto["id"],
-        "nombre": apto['title'],
-        "precio": apto['price'],
-        "moneda": apto['currency_id'],
-        "dirección": apto['location']['address_line'],
-        "foto": apto['thumbnail'],
-        "area_total": "",
-        "tipo_de_inmueble": "",
-        "baños": "",
-        "area_cubierta": "",
-        "dormitorios": "",
-        "estado_apto": ""
-    }
-    for info in apto['attributes']:
-        valor = info['value_name']
-        if apto['id'] == 'ITEM_CONDITION':
-            apartamento['estado_apto'] = valor
-        elif apto['id'] == 'BEDROOMS':
-            apartamento['dormitorios'] = valor
-        elif apto['id'] == 'COVERED_AREA':
-            apartamento['area_cubierta'] = valor
-        elif apto['id'] == 'FULL_BATHROOMS':
-            apartamento['baños'] = valor
-        elif apto['id'] == 'PROPERTY_TYPE':
-            apartamento['tipo_de_inmueble'] = valor
-        elif apto['id'] == 'TOTAL_AREA':
-            apartamento['area_total'] = valor
-    apartamentos.append(apartamento)
+    "https://api.mercadolibre.com/sites/MLU/search?q={}&condition=new".format(brand))
+itemsQuantity = json.loads(r.text)['paging']["total"]
+items = []
+offset = 0
+while len(items) < itemsQuantity and len(items) <= 1000:
+    for item in json.loads(r.text)['results']:
+        item = {
+            "id": item["id"],
+            "nombre": item['title'],
+            "precio": item['price'],
+            "moneda": item['currency_id'],
+            "link": item['permalink'],
+            "foto": item['thumbnail'],
+            "domain": item["domain_id"]
+        }
+        items.append(item)
+    offset = offset + 50
+    r = requests.get(
+    "https://api.mercadolibre.com/sites/MLU/search?q={}&condition=new&offset={}".format(brand, offset))
+print(len(items))
