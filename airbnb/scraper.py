@@ -15,15 +15,17 @@ except TimeoutException:
     print("Timed out waiting for page to load")
 finally:
     print("Page loaded")
-    items = driver.find_element(By.XPATH,
-                                '//main[@class="contenedor-resultados-busqueda"]').find_elements(By.XPATH,
-                                                                                                 '//div[@class="hit resultado-de-busqueda"]')
+    items = driver.find_elements(By.XPATH, '//div[@class="ais-hits--item"]')
     objetos = []
     for item in items:
+        print(item.find_element(
+            By.XPATH, './/div[@class="informacion-resultado-de-busqueda"]').find_element(By.XPATH, './/h2').text)
         objeto = {
-            'objeto': item.find_element(By.XPATH, '//div[@class="informacion-resultado-de-busqueda"]').find_element(By.XPATH, '//h2').text,
-            'descripcion': item.find_element(By.XPATH, '//div[@class="informacion-resultado-de-busqueda"]').find_element(By.XPATH, '//p[@class="resultado-info-descripcion"]').text,
-            'precio': item.find_element(By.XPATH, '//div[@class="resultado-info-precio"]').text,
+            'objeto': item.find_element(By.XPATH, './/div[@class="informacion-resultado-de-busqueda"]').find_element(By.XPATH, './/h2').text,
+            'descripcion': item.find_element(By.XPATH, './/div[@class="informacion-resultado-de-busqueda"]').find_element(By.XPATH, './/p[@class="resultado-info-descripcion"]').text,
+            'precio': item.find_element(By.XPATH, './/div[@class="resultado-info-precio"]').text.split()[1],
+            'moneda': item.find_element(By.XPATH, './/div[@class="resultado-info-precio"]').text.split()[0],
+            'categoría': item.find_element(By.XPATH, './/div[@class="foto-resultado-de-busqueda"]/a').get_attribute('href').split('/')[-2],
         }
         objetos.append(objeto)
     print(objetos)
