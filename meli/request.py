@@ -2,6 +2,7 @@ import requests
 import sys
 import json
 
+
 def meliClient(brand):
     ##brand = sys.argv[1]
     r = requests.get(
@@ -9,7 +10,7 @@ def meliClient(brand):
     itemsQuantity = json.loads(r.text)['paging']["total"]
     items = []
     offset = 0
-    while len(items) < itemsQuantity and len(items) <= 100:
+    while len(items) < itemsQuantity and len(items) <= 1000:
         for item in json.loads(r.text)['results']:
             item = {
                 "id": item["id"],
@@ -23,6 +24,5 @@ def meliClient(brand):
             items.append(item)
         offset = offset + 50
         r = requests.get(
-        "https://api.mercadolibre.com/sites/MLU/search?q={}&condition=new&offset={}".format(brand, offset))
-    print(len(items))
+            "https://api.mercadolibre.com/sites/MLU/search?q={}&condition=new&offset={}".format(brand, offset))
     return items
