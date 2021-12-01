@@ -28,7 +28,7 @@ def loiClient(brand):
                 'moneda': item.find_element(By.XPATH, './/div[@class="resultado-info-precio"]').text.split()[0],
                 'categoría': item.find_element(By.XPATH, './/div[@class="foto-resultado-de-busqueda"]/a').get_attribute('href').split('/')[-2],
                 'nombreCorto': item.find_element(By.XPATH, './/div[@class="foto-resultado-de-busqueda"]/a').get_attribute('href').split('/')[-1].replace("-", " "),
-                'link': item.find_element(By.XPATH, './/div[@class="foto-resultado-de-busqueda"]/a').get_attribute('href'),
+                'foto': item.find_element(By.XPATH, './/div[@class="foto-resultado-de-busqueda"]/img').get_attribute('src'),
             }
             objetos.append(objeto)
         return objetos
