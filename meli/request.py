@@ -12,6 +12,10 @@ def meliClient(brand):
     offset = 0
     while len(items) < itemsQuantity and len(items) <= 1000:
         for item in json.loads(r.text)['results']:
+            modelo = ""
+            for attribute in item["attributes"]:
+                if attribute["id"] == "MODEL":
+                    modelo = attribute["value_name"]
             item = {
                 "id": item["id"],
                 "name": item['title'],
@@ -19,7 +23,8 @@ def meliClient(brand):
                 "currency": item['currency_id'],
                 "link": item['permalink'],
                 "photo": item['thumbnail'],
-                "domain": item["domain_id"]
+                "domain": item["domain_id"],
+                "model": modelo
             }
             items.append(item)
         offset = offset + 50
