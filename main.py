@@ -16,10 +16,6 @@ conn.commit()
 
 meliResponse = meliClient(brand)
 loiResponse = loiClient(brand)
-itemsFinales = []
-
-print(len(meliResponse))
-print(len(loiResponse))
 
 for loiItem in loiResponse:
     loiItem['model'] = ''
@@ -28,9 +24,6 @@ for loiItem in loiResponse:
             meliResponse.remove(meliItem)
             loiItem["precio"] = (loiItem["precio"] + meliItem['price']) / 2
             loiItem["model"] = meliItem['model']
-
-
-print(len(meliResponse))
 
 
 for meliItem in meliResponse:
