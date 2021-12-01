@@ -9,7 +9,7 @@ c = conn.cursor()
 
 c.execute('''
          CREATE TABLE IF NOT EXISTS items
-         ([itemId] TEXT PRIMARY KEY, [name] TEXT, [price] TEXT, [currency] TEXT, [link] TEXT, [photo] TEXT, [domain] TEXT, [platform] TEXT)
+         ([name] TEXT PRIMARY KEY, [category] TEXT, [price] TEXT, [currency] TEXT, [model] TEXT, [photo] TEXT, [description] TEXT)
          ''')
 
 conn.commit()
@@ -22,16 +22,16 @@ for loiItem in loiResponse:
     for meliItem in meliResponse:
         if loiItem["nombreCorto"].lower() in meliItem["name"].lower():
             meliResponse.remove(meliItem)
-            loiItem["precio"] = (loiItem["precio"] + meliItem['price']) / 2
+            loiItem["precio"] = (float(loiItem["precio"]) + float(meliItem['price'])) / 2
             loiItem["model"] = meliItem['model']
 
 
 for meliItem in meliResponse:
-    c.execute("""INSERT OR REPLACE INTO items VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
-              (meliItem["id"], meliItem["name"], meliItem["price"], meliItem["currency"], meliItem["link"], meliItem["photo"], meliItem["domain"], "meli",))
+    c.execute("""INSERT OR REPLACE INTO items VALUES(?, ?, ?, ?, ?, ?, ?)""",
+              (meliItem["name"], meliItem["domain"], meliItem["price"], meliItem["currency"], meliItem["model"], meliItem["photo"], "",))
 
 for loiItem in loiResponse:
-    c.execute("""INSERT OR REPLACE INTO items VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
-              (loiItem["nombre"], loiItem["nombreCorto"], loiItem["precio"], loiItem["moneda"], loiItem["link"], "", "", "loi",))
+    c.execute("""INSERT OR REPLACE INTO items VALUES(?, ?, ?, ?, ?, ?, ?)""",
+              (loiItem["objeto"], loiItem["categoria"], loiItem["precio"], loiItem["moneda"], loiItem["model"], loiItem["foto"], loiItem["descripcion"]))
 
 conn.commit()
