@@ -2,6 +2,7 @@ import requests
 import sys
 import json
 
+
 def meliClient(brand):
     ##brand = sys.argv[1]
     r = requests.get(
@@ -11,6 +12,10 @@ def meliClient(brand):
     offset = 0
     while len(items) < itemsQuantity and len(items) <= 100:
         for item in json.loads(r.text)['results']:
+            modelo = ""
+            for attribute in item["attributes"]:
+                if attribute["id"] == "MODEL":
+                    modelo = attribute["value_name"]
             item = {
                 "id": item["id"],
                 "name": item['title'],
@@ -18,7 +23,8 @@ def meliClient(brand):
                 "currency": item['currency_id'],
                 "link": item['permalink'],
                 "photo": item['thumbnail'],
-                "domain": item["domain_id"]
+                "domain": item["domain_id"],
+                "model": modelo
             }
             items.append(item)
         offset = offset + 50
