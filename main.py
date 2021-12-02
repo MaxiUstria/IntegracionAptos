@@ -20,10 +20,12 @@ loiResponse = loiClient(brand)
 for loiItem in loiResponse:
     loiItem['model'] = ''
     for meliItem in meliResponse:
-        if loiItem["nombreCorto"].lower() in meliItem["name"].lower():
+        if loiItem["nombreCorto"].lower() in meliItem["name"].lower() and loiItem["categoria"] == meliItem['domain']:
             meliResponse.remove(meliItem)
-            loiItem["precio"] = (float(loiItem["precio"]) + float(meliItem['price'])) / 2
+            loiItem["precio"] = (float(loiItem["precio"]) +
+                                 float(meliItem['price'])) / 2
             loiItem["model"] = meliItem['model']
+            print(meliItem['name'])
 
 
 for meliItem in meliResponse:
