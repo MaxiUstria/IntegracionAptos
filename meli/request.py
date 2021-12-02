@@ -16,6 +16,21 @@ def meliClient(brand):
             for attribute in item["attributes"]:
                 if attribute["id"] == "MODEL":
                     modelo = attribute["value_name"]
+
+            category_switcher = {
+                "MLU-CELLPHONES": "celulares y tablets",
+                "MLU-TABLETS": "celulares y tablets",
+                "MLU-SMARTWATCHES" : "Smartwatches y Bandas",
+                "MLU-CELLPHONE_COVERS": "Accesorios",
+                "MLU-WIRELESS_CHARGERS": "Accesorios",
+                "MLU-HEADPHONES": "Perifericos",
+                "MLU-REFRIGERATORS": "Electrodomésticos",
+                "MLU-MICROWAVES": "Electrodomésticos",
+                "MLU-TELEVISIONS": "Televisores",
+                "MLU-NOTEBOOKS": "Notebooks",
+                "MLU-COMPUTER_MONITORS": "Monitores",
+            }
+
             item = {
                 "id": item["id"],
                 "name": item['title'],
@@ -23,7 +38,7 @@ def meliClient(brand):
                 "currency": item['currency_id'],
                 "link": item['permalink'],
                 "photo": item['thumbnail'],
-                "domain": item["domain_id"],
+                "domain": category_switcher.get(item["domain_id"], "Otros"),
                 "model": modelo
             }
             items.append(item)
